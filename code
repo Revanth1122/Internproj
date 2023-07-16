@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hospital Reception Page</title>
+    <style>
+        .symptom-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Medications</h1>
+    <hr>
+    <h2>Patient Information</h2>
+    <p>Lab Number: <span id="lab-number"></span></p>
+    <p>Patient Name: <span id="patient-name"></span></p>
+    <p>Gender: <span id="gender"></span></p>
+    <p>Age: <span id="age"></span></p>
+    <p>Referred By: <span id="referred-by"></span></p>
+    <hr>
+    <h2>Symptoms</h2>
+    <div id="symptoms">
+        <img class="symptom-icon" src="https://cdn-icons-png.flaticon.com/512/4843/4843993.png" alt="Headache"> Headache
+        <img class="symptom-icon" src="https://cdn-icons-png.flaticon.com/512/2038/2038050.png" alt="Dizziness"> Dizziness
+        <img class="symptom-icon" src="https://cdn-icons-png.flaticon.com/512/3017/3017399.png" alt="Fatigue"> Fatigue
+        <img class="symptom-icon" src="https://cdn-icons-png.flaticon.com/512/9818/9818119.png" alt="Nausea"> Nausea
+        <img class="symptom-icon" src="https://cdn4.vectorstock.com/i/1000x1000/42/33/diarrhea-constipation-color-icon-vector-29124233.jpg" alt="Constipation"> Constipation
+        <img class="symptom-icon" src="https://cdn-icons-png.flaticon.com/512/3782/3782014.png" alt="Loss of Appetite"> Loss of Appetite
+    </div>
+    <hr>
+    <h2>Test Results</h2>
+    <hr>
+    <div id="test-results"></div>
+
+    <script>
+        const jsonData = {
+            "LabNo": "MED004.119657",
+            "PName": "DUMMYP",
+            "Gender": "Male",
+            "Age": "34 Y 0 M 0 D",
+            "ReferredBy": "Self",
+            "results": [{
+                    "Package_name": "LIPID PROFILE",
+                    "investigation": [{
+                        "test_name": "LIPID PROFILE",
+                        "SampleType": "SERUM",
+                        "SampleCollDate": "14-07-2021 10:07:00",
+                        "SampleRcvDate": "14-07-2021 16:07:09",
+                        "ApprovalDate": "14-07-2021 16:07:05",
+                        "IsNabl": "0",
+                        "observations": [{
+                                "name": "TRIGLYCERIDES",
+                                "observation_time": "14-07-2021 16:07:07",
+                                "value": "150",
+                                "MinValue": "50",
+                                "MaxValue": "149",
+                                "unit": "mg/dL",
+                                "method": "Enzymatic",
+                                "impression": "High"
+                            },
+                            {
+                                "name": "NON-HDL CHOLESTEROL",
+                                "observation_time": "14-07-2021 16:07:07",
+                                "value": "144",
+                                "MinValue": "0",
+                                "MaxValue": "130",
+                                "unit": "mg/dl",
+                                "method": "Calculated",
+                                "impression": "High"
+                            },
+                            {
+                                "name": "TOTAL CHOLESTEROL",
+                                "observation_time": "14-07-2021 16:07:04",
+                                "value": "200",
+                                "MinValue": "50",
+                                "MaxValue": "199",
+                                "unit": "mg/dL",
+                                "method": "CHE/CHO/POD",
+                                "impression": "High"
+                            },
+                            {
+                                "name": "HDL CHOLESTEROL",
+                                "observation_time": "14-07-2021 16:07:07",
+                                "value": "56",
+                                "MinValue": "39",
+                                "MaxValue": "60",
+                                "unit": "mg/dL",
+                                "method": "CHE/CHO/POD",
+                                "impression": "Normal"
+                            },
+                            {
+                                "name": "LDL CHOLESTEROL",
+                                "observation_time": "14-07-2021 16:07:07",
+                                "value": "114",
+                                "MinValue": "0",
+                                "MaxValue": "100",
+                                "unit": "mg/dL",
+                                "method": "Calculated",
+                                "impression": "High"
+                            },
+                            {
+                                "name": "VLDL CHOLESTEROL",
+                                "observation_time": "14-07-2021 16:07:07",
+                                "value": "30",
+                                "MinValue": "5",
+                                "MaxValue": "30",
+                                "unit": "mg/dL",
+                                "method": "Calculated",
+                                "impression": "Normal"
+                            },
+                            {
+                                "name": "CHOL / HDL RATIO",
+                                "observation_time": "14-07-2021 16:07:07",
+                                "value": "3.57",
+                                "MinValue": "0",
+                                "MaxValue": "4.97",
+                                "unit": "Ratio",
+                                "method": "Calculated",
+                                "impression": "Normal"
+                            }
+                        ]
+                    }]
+                },
+                {
+                    "Package_name": "GLUCOSE, FASTING",
+                    "Package_book_code": "BIO101",
+                    "investigation": [{
+                        "test_name": "GLUCOSE, FASTING",
+                        "SampleType": "NAF PLASMA",
+                        "SampleCollDate": "14-07-2021 11:07:00",
+                        "SampleRcvDate": "14-07-2021 18:07:09",
+                        "ApprovalDate": "14-07-2021 18:07:28",
+                        "IsNabl": "1",
+                        "observations": [{
+                            "name": "GLUCOSE, FASTING",
+                            "observation_time": "14-07-2021 18:07:28",
+                            "id": "7",
+                            "value": "340",
+                            "MinValue": "70",
+                            "MaxValue": "100",
+                            "unit": "mg/dL",
+                            "method": "GOD - POD",
+                            "impression": "High"
+                        }]
+                    }]
+                }
+            ]
+        };
+
+        function generateObservationRows(observations) {
+            let rows = '';
+            for (let i = 0; i < observations.length; i++) {
+                const observation = observations[i];
+                rows += `
+      <tr>
+        <td>${observation.name}</td>
+        <td>${observation.value}</td>
+        <td>${observation.unit}</td>
+        <td>${observation.impression}</td>
+      </tr>
+    `;
+            }
+            return rows;
+        }
+
+        function populateReceptionPage() {
+            const patientNameElement = document.querySelector('#patient-name');
+            const labNumberElement = document.querySelector('#lab-number');
+            const genderElement = document.querySelector('#gender');
+            const ageElement = document.querySelector('#age');
+            const referredByElement = document.querySelector('#referred-by');
+            const testResultsElement = document.querySelector('#test-results');
+
+            patientNameElement.textContent = jsonData.PName;
+            labNumberElement.textContent = jsonData.LabNo;
+            genderElement.textContent = jsonData.Gender;
+            ageElement.textContent = jsonData.Age;
+            referredByElement.textContent = jsonData.ReferredBy;
+
+            for (let i = 0; i < jsonData.results.length; i++) {
+                const result = jsonData.results[i];
+                const packageElement = document.createElement('h3');
+                packageElement.textContent = result.Package_name;
+                testResultsElement.appendChild(packageElement);
+
+                const tableElement = document.createElement('table');
+                const tableHeaders = `
+      <tr>
+        <th>Test Name</th>
+        <th>Value</th>
+        <th>Unit</th>
+        <th>Impression</th>
+      </tr>
+    `;
+                tableElement.innerHTML = tableHeaders + generateObservationRows(result.investigation[0].observations);
+                testResultsElement.appendChild(tableElement);
+            }
+        }
+        populateReceptionPage();
+    </script>
+</body>
+
+</html>
